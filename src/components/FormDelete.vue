@@ -4,7 +4,6 @@
     <p>Вы точно хотите удалить курс?</p>
     <div class="form-actions">
       <button type="submit" class="button-danger">Да, удалить курс</button>
-      <button type="button" class="button-outline" @click="$emit('close')">Отмена</button>
     </div>
   </form>
 </template>
@@ -19,11 +18,10 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(["delete", "close"]);
+const emit = defineEmits(["delete"]);
 
 const handleDelete = () => {
   emit("delete", props.card.id);
-  emit("close");
 }
 
 </script>
@@ -32,7 +30,7 @@ const handleDelete = () => {
 
 <style scoped>
 .button-danger {
-  background-color: #f72585;
+  background-color: darkred;
   color: white;
 }
 </style>
