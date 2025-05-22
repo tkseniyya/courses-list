@@ -1,5 +1,5 @@
 <template>
-  <div :class="['card', { inactive: !card.isActive }]">
+  <div :class="['card', { inactive: !card.isActive, overdue: isOverdue && card.isActive }]">
     <div class="card-header">
       <h3 class="card-title">{{ card.title }}</h3>
       <div class="card-actions">
@@ -14,7 +14,10 @@
 
     <div v-if="card.isActive">
       <div class="card-description">{{ card.description }}</div>
-      <div class="card-lasting">{{ formatDate(card.lasting) }}</div>
+      <div class="card-lasting">
+        {{ formatDate(card.lasting) }}
+        <span v-if="isOverdue" class="overdue-badge">Дедлайн просрочен</span>
+      </div>
     </div>
     <div v-else class="inactive-message">
       Дело неактуально
@@ -24,6 +27,22 @@
 
 
 <script setup>
+import { ref, computed, onMounted, onUnmounted } from "vue";
+
+const props = defineProps({
+  index: Number,
+  card: Object
+})
+defineEmits(['edit', 'delete']);
+
+const currentTime = ref(Date.now());
+
+const isOverdue = computed(() => {
+  if (!props.card.lasting || !props.card.isActive) return false;
+  const deadline = new Date(props.card.lasting);
+  return currentTime.value > deadline;
+})
+
 const formatDate = (datetimeStr) => {
   if (!datetimeStr) return;
   const date = new Date(datetimeStr);
@@ -35,15 +54,29 @@ const formatDate = (datetimeStr) => {
     minute: "2-digit",
   });
 };
-defineProps({
-  index: {
-    type: Number,
-  },
-  card: {
-    type: Object,
-  }
+
+let checkInterval;
+
+const startChecking = () => {
+  checkInterval = setInterval(() => {
+    currentTime.value = Date.now();
+  }, 60000);
+
+  const now = new Date();
+  const secondsToNextMinute = 60 - now.getSeconds();
+  setTimeout(() => {
+    currentTime.value = Date.now();
+  }, secondsToNextMinute * 1000);
+};
+
+onMounted(() => {
+  startChecking()
 })
-defineEmits(['edit', 'delete']);
+
+onUnmounted(() => {
+  clearInterval(checkInterval);
+});
+
 
 </script>
 
@@ -60,6 +93,11 @@ defineEmits(['edit', 'delete']);
 
 .card.inactive {
   background: #f8f9fa;
+}
+
+.card.overdue {
+  border-left: 4px solid #f72585;
+  background-color: #fff0f0;
 }
 
 .card-header {
@@ -118,7 +156,13 @@ defineEmits(['edit', 'delete']);
 }
 
 .card-lasting {
+  display: flex;
+  flex-direction: column;
   color: #4361ee;
   font-weight: 500;
+}
+.card-lasting span {
+  color: #f72585;
+  font-weight: bold;
 }
 </style>

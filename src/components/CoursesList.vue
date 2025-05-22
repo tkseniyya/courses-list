@@ -14,7 +14,7 @@
 
 <script setup>
 import AppCard from "@/components/AppCard.vue";
-import { computed } from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
 const props = defineProps({
   cards: {
     type: Array
@@ -23,6 +23,15 @@ const props = defineProps({
 
 defineEmits(["edit", "delete"]);
 const sortedCards = computed(() => [...props.cards].sort((a, b) => b.isActive - a.isActive));
+const currentTime = ref(Date.now());
+
+onMounted(() => {
+  const interval = setInterval(() => {
+    currentTime.value = Date.now();
+  }, 60000);
+
+  onUnmounted(() => clearInterval(interval));
+});
 </script>
 
 
