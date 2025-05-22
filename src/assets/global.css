@@ -37,10 +37,11 @@ button:hover {
 }
 
 .card {
-    width: 300px;
+    width: 520px;
     background: #b0ccff;
     border-radius: 10px;
     padding: 20px;
+    box-sizing: border-box;
     position: relative;
     transition: transform 0.2s;
 }
