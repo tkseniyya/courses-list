@@ -14,7 +14,7 @@
 
     <label>
       <p>Длительность курса:</p>
-      <input type="text" v-model="formData.lasting">
+      <input type="datetime-local" v-model="formData.lasting">
     </label>
 
     <label class="checkbox-label">

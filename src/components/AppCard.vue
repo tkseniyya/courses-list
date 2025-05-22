@@ -14,7 +14,7 @@
 
     <div v-if="card.isActive">
       <div class="card-description">{{ card.description }}</div>
-      <div class="card-lasting">{{ card.lasting }}</div>
+      <div class="card-lasting">{{ formatDate(card.lasting) }}</div>
     </div>
     <div v-else class="inactive-message">
       Курс неактивен
@@ -24,6 +24,17 @@
 
 
 <script setup>
+const formatDate = (datetimeStr) => {
+  if (!datetimeStr) return;
+  const date = new Date(datetimeStr);
+  return date.toLocaleString("ru-RU", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
 defineProps({
   index: {
     type: Number,

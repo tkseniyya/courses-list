@@ -1,9 +1,14 @@
 <template>
-  <button @click="isPopUpOpen = true">Добавить курс</button>
+  <button @click="isPopUpOpen = true">Добавить дело</button>
 
   <PopUp :isOpen="isPopUpOpen" @close="isPopUpOpen = false">
-    <FormCreate @success="handleFormSuccess" />
+    <FormCreate
+      @success="handleFormSuccess"
+      @close="isPopUpOpen = false"
+    />
   </PopUp>
+
+
   <PopUp :isOpen="isEditPopUpOpen" @close="isEditPopUpOpen = false">
     <FormEdit
       :card="editingCard"
@@ -36,8 +41,10 @@ import PopUp from "./components/PopUp.vue";
 const isPopUpOpen = ref(false);
 const isEditPopUpOpen = ref(false);
 const isDeletePopUpOpen = ref(false);
+
 const editingCard = ref(null);
 const deletingCard = ref(null);
+
 const STORAGE_KEY = "vue-courses-app-data";
 
 const cards = ref([]);
@@ -60,6 +67,7 @@ watch(cards, () => {
 
 const handleFormSuccess = (newCard) => {
   cards.value.unshift(newCard);
+  isPopUpOpen.value = false;
 };
 
 const handleEditCard = (card) => {

@@ -1,7 +1,7 @@
 <template>
   <div v-if="isOpen" class="modal-overlay" @click.self="close">
     <div class="modal-content">
-      <button class="modal-close" @click="close">×</button>
+      <button class="modal-close" @click="$emit('close')">×</button>
       <slot></slot>
     </div>
   </div>
@@ -12,11 +12,6 @@ defineProps({
   isOpen: Boolean
 });
 
-const emit = defineEmits(['close']);
-
-const close = () => {
-  emit('close');
-};
 </script>
 
 <style scoped>

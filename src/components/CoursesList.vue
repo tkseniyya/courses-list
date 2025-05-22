@@ -1,5 +1,5 @@
 <template>
-  <h1>Courses List</h1>
+  <h1>To-Do List</h1>
   <div class="cards-container">
   <AppCard
     v-for="(item, index) in sortedCards"

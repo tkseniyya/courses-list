@@ -1,17 +1,32 @@
 <template>
   <form @submit.prevent="handleSubmit" class="form">
-    <h2>Создание нового курса: </h2>
-    <label>
-      <p>Название курса:</p>
-      <input type="text" v-model="newCard.title">
+    <h2>Создание нового дела</h2>
+    <label class="form-label">
+      <p>Название:</p>
+      <input
+        type="text"
+        v-model="newCard.title"
+        @blur="v$.title.$touch()"
+      >
+      <span class="error" v-if="v$.title.$error">
+        {{ v$.title.$errors[0].$message }}
+      </span>
     </label>
-    <label>
-      <p>Описание курса:</p>
+    <label class="form-label">
+      <p>Описание:</p>
       <input type="text" v-model="newCard.description">
     </label>
-    <label>
-      <p>Длительность курса:</p>
-      <input type="text" v-model="newCard.lasting">
+    <label class="form-label">
+      <p>Дедлайн:</p>
+      <input
+        type="datetime-local"
+        class="datetimepicker"
+        v-model="newCard.lasting"
+        @blur="v$.lasting.$touch()"
+      >
+      <span class="error" v-if="v$.lasting.$error">
+        {{ v$.lasting.$errors[0].$message }}
+      </span>
     </label>
     <div class="form-actions">
       <button type="submit">Сохранить</button>
@@ -23,21 +38,44 @@
 
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useVuelidate } from '@vuelidate/core';
+import { required, helpers } from '@vuelidate/validators';
 
-const emit = defineEmits(["success"]);
+
 const newCard = ref({
-  id: 0,
+  id: Date.now(),
   title: '',
   description: '',
   lasting: '',
   isActive: true
 })
 
-const handleSubmit = () => {
-  if (!newCard.value.title) return;
+const rules = computed(() => ({
+  title: {
+    required: helpers.withMessage('Название обязательно', required),
+  },
+  lasting: {
+    validDate: helpers.withMessage(
+      'Дедлайн должен быть в будущем',
+      value => !value || new Date(value) > new Date()
+    )
+  }
+}))
 
-  emit("success", {...newCard.value});
+const emit = defineEmits(["success", "close"]);
+const v$ = useVuelidate(rules, newCard);
+
+const handleSubmit = async () => {
+  const isValid = await v$.value.$validate();
+
+  if (!isValid) return
+
+  emit("success", {
+    ...newCard.value,
+    id: Date.now()
+  });
+  emit("close");
   clearForm();
 }
 
@@ -49,8 +87,8 @@ const clearForm = () => {
     lasting: '',
     isActive: true
   };
+  v$.value.$reset()
 }
-
 </script>
 
 
@@ -60,5 +98,15 @@ const clearForm = () => {
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
+}
+.form-label {
+  display: flex;
+  flex-direction: column;
+}
+.form-label input {
+  margin: 5px 0;
+}
+.error {
+  color: red;
 }
 </style>
