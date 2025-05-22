@@ -17,7 +17,7 @@
       <div class="card-lasting">{{ formatDate(card.lasting) }}</div>
     </div>
     <div v-else class="inactive-message">
-      Курс неактивен
+      Дело неактуально
     </div>
   </div>
 </template>

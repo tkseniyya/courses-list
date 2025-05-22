@@ -1,6 +1,22 @@
 body {
     margin: 30px 150px;
 }
-.card-container {
+.form-label textarea {
+    min-width: 100%;
+    min-height: 100px;
+    max-height: 300px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+    margin: 5px 0;
+}
 
+.form-label {
+    display: flex;
+    flex-direction: column;
+}
+
+.error {
+    color: red;
 }

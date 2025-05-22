@@ -1,25 +1,40 @@
 <template>
   <form @submit.prevent="handleSave" class="form">
-    <h2>{{ formData.isActive ? 'Редактирование курса' : 'Активация курса' }}</h2>
+    <h2>{{ formData.isActive ? 'Редактирование дела' : 'Актуализация дела' }}</h2>
 
-    <label>
-      <p>Название курса:</p>
-      <input type="text" v-model="formData.title" required>
+    <label class="form-label">
+      <p>Название дела:</p>
+      <input
+        type="text"
+        v-model="formData.title"
+        @blur="v$.title.$touch()"
+      >
+      <span class="error" v-if="v$.title.$error">
+        {{ v$.title.$errors[0].$message }}
+      </span>
     </label>
 
-    <label>
-      <p>Описание курса:</p>
+    <label class="form-label">
+      <p>Описание дела:</p>
       <textarea v-model="formData.description" rows="3"></textarea>
     </label>
 
-    <label>
-      <p>Длительность курса:</p>
-      <input type="datetime-local" v-model="formData.lasting">
+    <label class="form-label">
+      <p>Дедлайн:</p>
+      <input
+        type="datetime-local"
+        class="datetimepicker"
+        v-model="formData.lasting"
+        @blur="v$.lasting.$touch()"
+      >
+      <span class="error" v-if="v$.lasting.$error">
+        {{ v$.lasting.$errors[0].$message }}
+      </span>
     </label>
 
     <label class="checkbox-label">
       <input type="checkbox" v-model="formData.isActive">
-      <span>{{ formData.isActive ? 'Активный курс' : 'Сделать курс активным' }}</span>
+      <span>{{ formData.isActive ? 'Дело актуально' : 'Сделать дело актуальным' }}</span>
     </label>
 
     <div class="form-actions">
@@ -31,7 +46,7 @@
         class="button-success"
         @click="activateAndSave"
       >
-        Активировать и сохранить
+        Актуализировать и сохранить
       </button>
     </div>
   </form>
@@ -39,7 +54,9 @@
 
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed, onMounted } from "vue";
+import { useVuelidate } from '@vuelidate/core';
+import { required, helpers } from '@vuelidate/validators';
 
 const props = defineProps({
   card: {
@@ -47,16 +64,44 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(["save", "close"]);
-const formData = ref({...props.card})
+const rules = computed(() => ({
+  title: {
+    required: helpers.withMessage('Название обязательно', required),
+  },
+  lasting: {
+    validDate: helpers.withMessage(
+      'Дедлайн должен быть в будущем',
+      value => !value || new Date(value) > new Date()
+    )
+  }
+}));
 
-const handleSave = () => {
+const formData = ref({
+  id: '',
+  title: '',
+  description: '',
+  lasting: '',
+  isActive: true
+});
+
+onMounted(() => {
+  formData.value = { ...props.card };
+});
+
+const v$ = useVuelidate(rules, formData);
+const emit = defineEmits(["save", "close"]);
+
+
+const handleSave = async() => {
+  const isValid = await v$.value.$validate();
+
+  if (!isValid) return
   emit("save", {...formData.value});
 }
 
-const activateAndSave = () => {
+const activateAndSave = async () => {
   formData.value.isActive = true;
-  handleSave();
+  await handleSave();
 }
 </script>
 

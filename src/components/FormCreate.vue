@@ -14,7 +14,7 @@
     </label>
     <label class="form-label">
       <p>Описание:</p>
-      <input type="text" v-model="newCard.description">
+      <textarea type="text" v-model="newCard.description"></textarea>
     </label>
     <label class="form-label">
       <p>Дедлайн:</p>
@@ -98,15 +98,5 @@ const clearForm = () => {
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
-}
-.form-label {
-  display: flex;
-  flex-direction: column;
-}
-.form-label input {
-  margin: 5px 0;
-}
-.error {
-  color: red;
 }
 </style>
