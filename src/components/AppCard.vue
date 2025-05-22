@@ -58,17 +58,11 @@ const formatDate = (datetimeStr) => {
 let checkInterval;
 
 const startChecking = () => {
+  currentTime.value = Date.now();
   checkInterval = setInterval(() => {
     currentTime.value = Date.now();
-  }, 60000);
-
-  const now = new Date();
-  const secondsToNextMinute = 60 - now.getSeconds();
-  setTimeout(() => {
-    currentTime.value = Date.now();
-  }, secondsToNextMinute * 1000);
+  }, 1000);
 };
-
 onMounted(() => {
   startChecking()
 })
