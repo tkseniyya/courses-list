@@ -94,9 +94,5 @@ const clearForm = () => {
 
 
 <style scoped>
-.form-actions {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-}
+
 </style>

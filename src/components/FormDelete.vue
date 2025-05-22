@@ -29,8 +29,5 @@ const handleDelete = () => {
 
 
 <style scoped>
-.button-danger {
-  background-color: darkred;
-  color: white;
-}
+
 </style>

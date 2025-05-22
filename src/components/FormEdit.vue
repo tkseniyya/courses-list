@@ -108,48 +108,5 @@ const activateAndSave = async () => {
 
 
 <style scoped>
-.form {
-  max-width: 500px;
-  margin: 0 auto;
-}
 
-textarea {
-  min-width: 100%;
-  min-height: 100px;
-  max-height: 300px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  resize: vertical;
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 1rem 0;
-}
-
-.form-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-  flex-wrap: wrap;
-}
-
-.button-primary {
-  background-color: #4361ee;
-  color: white;
-}
-
-.button-outline {
-  background: transparent;
-  border: 1px solid #4361ee;
-  color: #4361ee;
-}
-
-.button-success {
-  background-color: #4cc9f0;
-  color: white;
-}
 </style>
