@@ -35,6 +35,10 @@
         {{ v$.lasting.$errors[0].$message }}
       </span>
     </label>
+    <label class="checkbox-label">
+      <input type="checkbox" v-model="newCard.isFixed">
+      <span>{{ newCard.isFixed ? 'Дело закреплено' : 'Закрепить дело' }}</span>
+    </label>
     <div class="form-actions">
       <button type="submit">Сохранить</button>
       <button type="button" @click="clearForm">Очистить</button>
@@ -47,7 +51,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useVuelidate } from '@vuelidate/core';
-import {required, helpers, minLength} from '@vuelidate/validators';
+import { required, helpers, minLength} from '@vuelidate/validators';
 
 
 const newCard = ref({
@@ -55,7 +59,8 @@ const newCard = ref({
   title: '',
   description: '',
   lasting: '',
-  isActive: true
+  isActive: true,
+  isFixed: false,
 })
 
 const rules = computed(() => ({
@@ -95,10 +100,17 @@ const clearForm = () => {
     title: '',
     description: '',
     lasting: '',
-    isActive: true
+    isActive: true,
+    isFixed: false,
   };
   v$.value.$reset()
 }
+
+const fixingCard = (card) => {
+  if (isFixed) {
+
+  }
+};
 </script>
 
 

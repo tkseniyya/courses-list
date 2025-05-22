@@ -8,6 +8,7 @@
     :index="index"
     @edit="$emit('edit', item)"
     @delete="$emit('delete', item.id)"
+    @fix="$emit('fix', item.id)"
   />
 </div>
 </template>
@@ -21,8 +22,13 @@ const props = defineProps({
   }
 });
 
-defineEmits(["edit", "delete"]);
-const sortedCards = computed(() => [...props.cards].sort((a, b) => b.isActive - a.isActive));
+defineEmits(["edit", "delete", "fix"]);
+const sortedCards = computed(() => {
+  return [...props.cards].sort((a, b) => {
+    if (a.isFixed !== b.isFixed) return a.isFixed ? -1 : 1;
+    return b.isActive - a.isActive;
+  });
+});
 const currentTime = ref(Date.now());
 
 onMounted(() => {

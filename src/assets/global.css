@@ -185,7 +185,6 @@ button:hover {
     font-weight: 500;
     color: #22223b;
 }
-
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -197,6 +196,13 @@ button:hover {
     justify-content: center;
     align-items: center;
     z-index: 1000;
+}
+
+
+.form-checkboxes {
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
 }
 
 .modal-content {

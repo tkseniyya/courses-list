@@ -38,11 +38,18 @@
         {{ v$.lasting.$errors[0].$message }}
       </span>
     </label>
+    <div class="form-checkboxes">
+      <label class="checkbox-label">
+        <input type="checkbox" v-model="formData.isActive">
+        <span>{{ formData.isActive ? 'Дело актуально' : 'Сделать дело актуальным' }}</span>
+      </label>
 
-    <label class="checkbox-label">
-      <input type="checkbox" v-model="formData.isActive">
-      <span>{{ formData.isActive ? 'Дело актуально' : 'Сделать дело актуальным' }}</span>
-    </label>
+      <label class="checkbox-label">
+        <input type="checkbox" v-model="formData.isFixed">
+        <span>{{ formData.isFixed ? 'Дело закреплено' : 'Закрепить дело' }}</span>
+      </label>
+    </div>
+
 
     <div class="form-actions">
       <button type="submit" class="button-primary">Сохранить</button>
@@ -91,7 +98,8 @@ const formData = ref({
   title: '',
   description: '',
   lasting: '',
-  isActive: true
+  isActive: true,
+  isFixed: false,
 });
 
 onMounted(() => {

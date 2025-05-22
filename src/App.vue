@@ -29,6 +29,7 @@
     :cards="cards"
     @edit="handleEditCard"
     @delete="handleDeleteRequest"
+    @fix="toggleFixCard"
   />
 </template>
 
@@ -98,6 +99,13 @@ const handleDeleteRequest = (cardId) => {
   deletingCard.value = cards.value.find(card => card.id === cardId);
   isDeletePopUpOpen.value = true;
 };
+
+const toggleFixCard = (cardId) => {
+  const card = cards.value.find(card => card.id === cardId);
+  if (card) {
+    card.isFixed = !card.isFixed;
+  }
+}
 </script>
 
 <style scoped>

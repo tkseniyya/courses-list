@@ -1,9 +1,9 @@
 <template>
   <form @submit.prevent="handleDelete" class="form">
-    <h2>Удаление дела {{ card.title }}</h2>
+    <h2>Удаление дела "{{ card.title }}"</h2>
     <p>Вы точно хотите удалить дело?</p>
     <div class="form-actions">
-      <button type="submit" class="button-danger">Да, удалить дело</button>
+      <button type="submit" class="button-danger">Да</button>
     </div>
   </form>
 </template>

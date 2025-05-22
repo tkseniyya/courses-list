@@ -1,5 +1,5 @@
 <template>
-  <div :class="['card', { inactive: !card.isActive, overdue: isOverdue && card.isActive }]">
+  <div :class="['card', { inactive: !card.isActive, overdue: isOverdue && card.isActive,  fixed: card.isFixed }]">
     <div class="card-header">
       <h3 class="card-title">{{ card.title }}</h3>
       <div class="card-actions">
@@ -8,6 +8,14 @@
         </button>
         <button @click.stop="$emit('delete', card.id)" class="action-btn delete-btn" title="Удалить">
           🗑️
+        </button>
+        <button
+          v-if="card.isFixed"
+          @click.stop="$emit('fix', card.id)"
+          class="action-btn fix-btn"
+          title="Открепить"
+        >
+          📌
         </button>
       </div>
     </div>
@@ -33,7 +41,7 @@ const props = defineProps({
   index: Number,
   card: Object
 })
-defineEmits(['edit', 'delete']);
+defineEmits(['edit', 'delete', 'fix']);
 
 const currentTime = ref(Date.now());
 
