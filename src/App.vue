@@ -1,5 +1,8 @@
 <template>
-  <button @click="isPopUpOpen = true">Добавить дело</button>
+  <div class="header__btn">
+    <button @click="isPopUpOpen = true">Добавить дело</button>
+    <button @click="deleteAll">Удалить все записи</button>
+  </div>
 
   <PopUp :isOpen="isPopUpOpen" @close="isPopUpOpen = false">
     <FormCreate
@@ -64,6 +67,10 @@ const saveToLocalStorage = () => {
 watch(cards, () => {
   saveToLocalStorage();
 }, { deep: true });
+
+const deleteAll = () => {
+  cards.value = [];
+}
 
 const handleFormSuccess = (newCard) => {
   cards.value.unshift(newCard);

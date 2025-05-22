@@ -12,6 +12,11 @@ body {
     font-family: 'Comfortaa', sans-serif;
 }
 
+.header__btn {
+    display: flex;
+    gap: 20px;
+}
+
 button {
     background:  #4895ef ;
     color: #fff;

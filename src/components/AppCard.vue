@@ -70,10 +70,7 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(checkInterval);
 });
-
-
 </script>
-
 
 <style scoped>
 </style>

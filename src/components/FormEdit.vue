@@ -16,7 +16,14 @@
 
     <label class="form-label">
       <p>Описание дела:</p>
-      <textarea v-model="formData.description" rows="3"></textarea>
+      <textarea
+        type="text"
+        v-model="formData.description"
+        @blur="v$.description.$touch()"
+      ></textarea>
+      <span class="error" v-if="v$.description.$error">
+        {{ v$.description.$errors[0].$message }}
+      </span>
     </label>
 
     <label class="form-label">
@@ -56,7 +63,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useVuelidate } from '@vuelidate/core';
-import { required, helpers } from '@vuelidate/validators';
+import {required, helpers, minLength} from '@vuelidate/validators';
 
 const props = defineProps({
   card: {
@@ -67,6 +74,9 @@ const props = defineProps({
 const rules = computed(() => ({
   title: {
     required: helpers.withMessage('Название обязательно', required),
+  },
+  description: {
+    minLength: helpers.withMessage('Описание должно иметь не менее 3 символов', minLength(3))
   },
   lasting: {
     validDate: helpers.withMessage(
