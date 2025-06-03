@@ -35,6 +35,12 @@
         {{ v$.lasting.$errors[0].$message }}
       </span>
     </label>
+    <label class="form-label">
+      <p>Список:</p>
+      <select v-model="newCard.list">
+        <option v-for="list in lists" :value="list">{{ list }}</option>
+      </select>
+    </label>
     <label class="checkbox-label">
       <input type="checkbox" v-model="newCard.isFixed">
       <span>{{ newCard.isFixed ? 'Дело закреплено' : 'Закрепить дело' }}</span>
@@ -109,9 +115,3 @@ const clearForm = () => {
 }
 
 </script>
-
-
-
-<style scoped>
-
-</style>

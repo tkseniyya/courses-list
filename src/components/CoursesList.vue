@@ -1,17 +1,22 @@
 <template>
-  <h1>To-Do List</h1>
-  <div class="cards-container">
-  <AppCard
-    v-for="(item, index) in sortedCards"
-    :key="item.id"
-    :card="item"
-    :index="index"
-    @edit="$emit('edit', item)"
-    @delete="$emit('delete', item.id)"
-    @fix="$emit('fix', item.id)"
-    @done="$emit('done', item.id)"
-  />
-</div>
+  <div class="courses-list">
+    <div class="list-header">
+      <h2>{{ activeFilter }}</h2>
+      <span class="tasks-count">{{ cards.length }} задач</span>
+    </div>
+    <div class="cards-container">
+      <AppCard
+        v-for="(item, index) in sortedCards"
+        :key="item.id"
+        :card="item"
+        :index="index"
+        @edit="$emit('edit', item)"
+        @delete="$emit('delete', item.id)"
+        @fix="$emit('fix', item.id)"
+        @done="$emit('done', item.id)"
+      />
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -40,9 +45,3 @@ onMounted(() => {
   onUnmounted(() => clearInterval(interval));
 });
 </script>
-
-
-
-<style scoped>
-
-</style>

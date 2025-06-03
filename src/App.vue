@@ -1,47 +1,57 @@
 <template>
-  <div class="header__btn">
-    <button @click="isPopUpOpen = true">Добавить дело</button>
-    <button @click="deleteAll">Удалить все записи</button>
+  <div class="app-container">
+    <Sidebar>
+      :active-filter="currentFilter"
+      @filter-changed="handleFilterChange"
+    </Sidebar>
+
+    <div class="main-content">
+      <div class="header__btn">
+        <button @click="isPopUpOpen = true">Добавить дело</button>
+        <button @click="deleteAll">Удалить все записи</button>
+      </div>
+
+      <CoursesList
+        :cards="filteredCards"
+        @edit="handleEditCard"
+        @delete="handleDeleteRequest"
+        @fix="toggleFixCard"
+        @done="isCardDone"
+      />
+
+      <PopUp :isOpen="isPopUpOpen" @close="isPopUpOpen = false">
+        <FormCreate
+          @success="handleFormSuccess"
+          @close="isPopUpOpen = false"
+        />
+      </PopUp>
+
+      <PopUp :isOpen="isEditPopUpOpen" @close="isEditPopUpOpen = false">
+        <FormEdit
+          :card="editingCard"
+          @save="handleSaveCard"
+          @close="isEditPopUpOpen = false"
+        />
+      </PopUp>
+      <PopUp :isOpen="isDeletePopUpOpen" @close="isDeletePopUpOpen = false">
+        <FormDelete
+          :card="deletingCard"
+          @delete="handleDeleteCard"
+        />
+      </PopUp>
+    </div>
   </div>
-
-  <PopUp :isOpen="isPopUpOpen" @close="isPopUpOpen = false">
-    <FormCreate
-      @success="handleFormSuccess"
-      @close="isPopUpOpen = false"
-    />
-  </PopUp>
-
-
-  <PopUp :isOpen="isEditPopUpOpen" @close="isEditPopUpOpen = false">
-    <FormEdit
-      :card="editingCard"
-      @save="handleSaveCard"
-      @close="isEditPopUpOpen = false"
-    />
-  </PopUp>
-  <PopUp :isOpen="isDeletePopUpOpen" @close="isDeletePopUpOpen = false">
-    <FormDelete
-      :card="deletingCard"
-      @delete="handleDeleteCard"
-    />
-  </PopUp>
-  <CoursesList
-    :cards="cards"
-    @edit="handleEditCard"
-    @delete="handleDeleteRequest"
-    @fix="toggleFixCard"
-    @done="isCardDone"
-  />
 </template>
 
 <script setup>
-import {ref, onMounted, watch} from "vue";
+import {ref, onMounted, watch, computed} from "vue";
 
 import CoursesList from './components/CoursesList.vue';
 import FormCreate from "@/components/FormCreate.vue";
 import FormEdit from "@/components/FormEdit.vue";
 import FormDelete from "@/components/FormDelete.vue";
 import PopUp from "./components/PopUp.vue";
+import Sidebar from "@/components/Sidebar.vue";
 
 const isPopUpOpen = ref(false);
 const isEditPopUpOpen = ref(false);
@@ -52,7 +62,34 @@ const deletingCard = ref(null);
 
 const STORAGE_KEY = "vue-courses-app-data";
 
+const activeFilter = ref('all');
 const cards = ref([]);
+
+const filteredCards = computed(() => {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  return cards.value.filter(card => {
+    const cardDate = card.lasting ? new Date(card.lasting) : null;
+
+    switch (activeFilter.value) {
+      case 'all':
+        return true;
+      case 'today':
+        return cardDate && cardDate.toDateString() === today.toDateString();
+      case 'planned':
+        return cardDate && cardDate >= tomorrow && !card.isDone;
+      case 'completed':
+        return card.isDone;
+      case 'overdue':
+        return cardDate && cardDate < today && !card.isDone;
+      default:
+        return true;
+    }
+  });
+});
 
 onMounted(() => {
   const savedData = localStorage.getItem(STORAGE_KEY);
@@ -87,7 +124,7 @@ const handleEditCard = (card) => {
 const handleSaveCard = (updatedCard) => {
   const index = cards.value.findIndex(c => c.id === updatedCard.id);
   if (index !== -1) {
-  cards.value[index] = updatedCard;
+    cards.value[index] = updatedCard;
   }
   isEditPopUpOpen.value = false;
 }
