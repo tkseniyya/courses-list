@@ -48,6 +48,11 @@
         <input type="checkbox" v-model="formData.isFixed">
         <span>{{ formData.isFixed ? 'Дело закреплено' : 'Закрепить дело' }}</span>
       </label>
+
+      <label class="checkbox-label">
+        <input type="checkbox" v-model="formData.isDone">
+        <span>{{ formData.isDone ? 'Дело выполнено' : 'Дело не выполнено' }}</span>
+      </label>
     </div>
 
 

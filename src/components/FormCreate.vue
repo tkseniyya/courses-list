@@ -61,6 +61,7 @@ const newCard = ref({
   lasting: '',
   isActive: true,
   isFixed: false,
+  isDone: false,
 })
 
 const rules = computed(() => ({
@@ -102,15 +103,11 @@ const clearForm = () => {
     lasting: '',
     isActive: true,
     isFixed: false,
+    isDone: false,
   };
   v$.value.$reset()
 }
 
-const fixingCard = (card) => {
-  if (isFixed) {
-
-  }
-};
 </script>
 
 

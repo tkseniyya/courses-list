@@ -30,6 +30,7 @@
     @edit="handleEditCard"
     @delete="handleDeleteRequest"
     @fix="toggleFixCard"
+    @done="isCardDone"
   />
 </template>
 
@@ -104,6 +105,13 @@ const toggleFixCard = (cardId) => {
   const card = cards.value.find(card => card.id === cardId);
   if (card) {
     card.isFixed = !card.isFixed;
+  }
+}
+
+const isCardDone = (cardId) => {
+  const card = cards.value.find(card => card.id === cardId);
+  if (card) {
+    card.isDone = true;
   }
 }
 </script>

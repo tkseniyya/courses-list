@@ -1,8 +1,15 @@
 <template>
-  <div :class="['card', { inactive: !card.isActive, overdue: isOverdue && card.isActive,  fixed: card.isFixed }]">
+  <div :class="['card', { inactive: !card.isActive, overdue: isOverdue && card.isActive && !card.isDone,  fixed: card.isFixed, done: card.isDone }]">
     <div class="card-header">
       <h3 class="card-title">{{ card.title }}</h3>
       <div class="card-actions">
+        <button
+          v-if="!card.isDone"
+          @click.stop="$emit('done', card.id)"
+          class="action-btn done-btn"
+          title="Готово">
+          ✅
+        </button>
         <button @click.stop="$emit('edit', card)" class="action-btn edit-btn" title="Редактировать">
           ✏️
         </button>
@@ -24,7 +31,7 @@
       <div class="card-description">{{ card.description }}</div>
       <div class="card-lasting">
         {{ formatDate(card.lasting) }}
-        <span v-if="isOverdue" class="overdue-badge">Дедлайн просрочен</span>
+        <span v-if="isOverdue && !card.isDone" class="overdue-badge">Дедлайн просрочен</span>
       </div>
     </div>
     <div v-else class="inactive-message">
@@ -41,12 +48,12 @@ const props = defineProps({
   index: Number,
   card: Object
 })
-defineEmits(['edit', 'delete', 'fix']);
+defineEmits(['edit', 'delete', 'fix', 'done']);
 
 const currentTime = ref(Date.now());
 
 const isOverdue = computed(() => {
-  if (!props.card.lasting || !props.card.isActive) return false;
+  if (!props.card.lasting || !props.card.isActive || props.card.isDone) return false;
   const deadline = new Date(props.card.lasting);
   return currentTime.value > deadline;
 })

@@ -9,6 +9,7 @@
     @edit="$emit('edit', item)"
     @delete="$emit('delete', item.id)"
     @fix="$emit('fix', item.id)"
+    @done="$emit('done', item.id)"
   />
 </div>
 </template>
@@ -22,7 +23,7 @@ const props = defineProps({
   }
 });
 
-defineEmits(["edit", "delete", "fix"]);
+defineEmits(["edit", "delete", "fix", "done"]);
 const sortedCards = computed(() => {
   return [...props.cards].sort((a, b) => {
     if (a.isFixed !== b.isFixed) return a.isFixed ? -1 : 1;
